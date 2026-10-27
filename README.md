@@ -12,6 +12,14 @@ every cell you need to fill in, in the cheapest position the search could find.
 python3 qr_collider.py --emit out --verify
 ```
 
+Printed at actual size and scanned with a phone. The outlined cells are pale, so
+the sheet reads as intended before it is touched — and as a different URL after:
+
+<p align="center">
+  <img src="pre-filled.jpg" width="310" alt="printed sheet with five pale outlines; the phone reads lithic.uk/3u">
+  <img src="post-filled.jpg" width="310" alt="same sheet after a Sharpie; the phone now reads lithic.uk/5g">
+</p>
+
 ---
 
 ## Why this is possible at all
@@ -192,7 +200,13 @@ spends the *entire* 3-symbol repair budget on both scans, so print-noise
 tolerance is thin: 0 stray specks 20/20, but 1 speck only 4/20 before / 1/20
 after.
 
-`lithic.uk/mf → lithic.uk/mj` (mask 3) — the one to actually print
+**Confirmed on paper**, not just in software: printed at actual size and scanned
+with a phone, this sheet read `lithic.uk/3u`; once the five outlined cells were
+filled with a **Sharpie**, it read `lithic.uk/5g`. Those are the two photos at
+the top of this README. The speck numbers above are a simulated noise test, not
+that run — the real sheet passed it cleanly.
+
+`lithic.uk/mf → lithic.uk/mj` (mask 3) — the forgiving option
 
 ```bash
 python3 qr_collider.py --margin 1 --max-fills 12 --blob-weight 2 \
@@ -238,8 +252,10 @@ which is the 2.5 pen-regions the ranking table shows.
 
 - **Single-block ECC versions only.** Multi-block symbols (e.g. v3-Q) raise a
   clear error rather than guessing at a codeword layout.
-- **OpenCV is the only decoder oracle.** It agrees across scale 16 and 20, but a
-  real phone camera may differ. Nothing here has been verified on paper.
+- **OpenCV is the only *automated* decoder.** It agrees across scale 16 and 20.
+  Paper is confirmed for one sheet: the top pick (`3u → 5g`), printed at actual
+  size and scanned twice with a phone camera, before and after inking (photos at
+  the top). Every other sheet has been decoded from its written PNG, not paper.
 - The search is exhaustive up to `--max-candidates` (2,500); beyond that it
   samples, and `--seed` makes the sample reproducible.
 - The cheapest pairs spend the whole repair budget, so they are brittle by
@@ -251,7 +267,8 @@ which is the 2.5 pen-regions the ranking table shows.
 ## Files
 
 Commit: `qr_collider.py`, `masks.py`, `verify_pair.py`, `swatches.py`,
-`README.md`, `LICENSE`, `.gitignore`.
+`README.md`, `LICENSE`, `.gitignore`, plus the two photos the README embeds,
+`pre-filled.jpg` and `post-filled.jpg`.
 
 Generated, safe to ignore: `out*/` (sheets and reports from a run),
 `printer-swatches.png`, `__pycache__/` — all covered by `.gitignore`, so a plain
